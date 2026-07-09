@@ -1,0 +1,44 @@
+module comparator_1bit(
+    input a,
+    input b,
+    output gt,
+    output lt,
+    output eq
+);
+assign gt =  a & ~b;
+assign lt = ~a &  b;
+assign eq = ~(a ^ b);
+endmodule
+
+module comparator_2bit(
+    input [1:0] A,
+    input [1:0] B,
+    output GT,
+    output LT,
+    output EQ
+);
+wire gt1, lt1, eq1;
+wire gt0, lt0, eq0;
+wire w1, w2;
+
+comparator_1bit C1(
+    .a(A[1]),
+    .b(B[1]),
+    .gt(gt1),
+    .lt(lt1),
+    .eq(eq1)
+  );
+comparator_1bit C0(
+    .a(A[0]),
+    .b(B[0]),
+    .gt(gt0),
+    .lt(lt0),
+    .eq(eq0)
+);
+and G1(w1, eq1, gt0);
+and G2(w2, eq1, lt0);
+and G3(EQ, eq1, eq0);
+
+or G4(GT, gt1, w1);
+or G5(LT, lt1, w2);
+endmodule
