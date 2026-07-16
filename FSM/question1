@@ -1,0 +1,93 @@
+module consequtive_numbers(
+input clk,
+input rst,
+input x,
+output reg y
+);
+
+localparam IDLE = 3'd0,
+           ZERO_1 = 3'd1,
+           ZERO_2 = 3'd2,
+           ZERO_3 = 3'd3,
+           ONE_1 = 3'd4,
+           ONE_2 = 3'd5,
+           ONE_3 = 3'd6;
+
+reg [3:0] state,next_state;
+
+always @(posedge clk)begin
+
+if(rst)
+state <= IDLE;
+
+else
+state <= next_state;
+end
+
+always @(*)begin
+case(state)
+
+IDLE:begin
+
+if(x)
+next_state = ONE_1;
+else
+next_state = ZERO_1;
+end
+
+
+ZERO_1:begin
+
+if(x)
+next_state = ONE_1;
+else
+next_state = ZERO_2;
+end
+
+ZERO_2:begin
+
+if(x)
+next_state = ONE_1;
+else
+next_state = ZERO_3;
+end
+
+ZERO_3:begin
+
+if(x)
+next_state = ONE_1;
+else
+next_state = ZERO_3;
+end
+
+ONE_1:begin
+
+if(x)
+next_state = ONE_2;
+else
+next_state = ZERO_1;
+end
+
+ONE_2:begin
+
+if(x)
+next_state = ONE_3;
+else
+next_state = ZERO_1;
+end
+
+ONE_3:begin
+if(x)
+next_state = ONE_3;
+else
+next_state = ZERO_1;
+end
+endcase
+end
+
+//output logic
+
+always @(*)begin
+y = (state == ZERO_3) || (state == ONE_3);
+end
+endmodule 
