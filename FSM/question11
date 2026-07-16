@@ -1,0 +1,51 @@
+module moore_machine(
+input j,k,
+input clk,
+input rst,
+output reg out
+);
+
+localparam OFF = 2'd0,
+           ON  = 2'd1;
+
+reg state,next_state;
+
+always @(posedge clk)begin
+if(rst)
+state = OFF;
+else 
+state = next_state;
+end
+
+always @(*)begin
+case(state)
+
+OFF:begin
+
+if(j==1)begin
+next_state = ON;
+end else begin
+next_state = OFF;
+end
+end
+
+ON:begin
+
+if(k==1)begin
+next_state = OFF;
+end else begin
+next_state = ON;
+end
+end
+
+default:begin
+next_state = OFF;
+end
+
+endcase
+end
+
+always @(*)begin
+out = (state == ON);  
+end
+endmodule
